@@ -25,6 +25,8 @@ public interface IRepositoryManager
    /// </returns>
    string GetPatchContent(IEnumerable<Patch> patches);
 
+   void CommitChanges(string commitTitle, string commitDescription);
+
    /// <summary>
    /// Retrieves the status of the files in the specified Git repository.
    /// </summary>

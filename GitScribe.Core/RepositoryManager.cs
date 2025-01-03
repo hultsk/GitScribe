@@ -36,4 +36,33 @@ public class RepositoryManager : IRepositoryManager
          return repo.RetrieveStatus();
       }
    }
+
+   public void CommitChanges(string commitTitle, string commitDescription)
+   {
+      if (string.IsNullOrWhiteSpace(commitTitle))
+         throw new ArgumentException("Commit title cannot be null or empty.", nameof(commitTitle));
+
+      if (string.IsNullOrWhiteSpace(commitDescription))
+         throw new ArgumentException("Commit description cannot be null or empty.", nameof(commitDescription));
+
+      using (var repo = new Repository(m_repositoryPath))
+      {
+         // Check if the repository is dirty (has uncommitted changes)
+         if (repo.RetrieveStatus().Any())
+         {
+            var signature = repo.Config.BuildSignature(DateTimeOffset.Now);
+
+            // Combine the title and description
+            var fullCommitMessage = $"{commitTitle}\n\n{commitDescription}";
+
+            // Create the commit with title and description
+            var commit = repo.Commit(fullCommitMessage, signature, signature);
+         }
+         else
+         {
+            throw new InvalidOperationException("There are no changes to commit.");
+         }
+      }
+   }
+
 }
