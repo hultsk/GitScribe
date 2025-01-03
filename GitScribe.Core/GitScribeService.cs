@@ -31,7 +31,7 @@ namespace GitScribe.Core
 
          foreach (var entry in fileStatusEntries)
          {
-            if (entry.State == FileStatus.ModifiedInIndex || entry.State == FileStatus.NewInIndex)
+            if (entry.State == FileStatus.ModifiedInIndex || entry.State == FileStatus.NewInIndex || entry.State == FileStatus.DeletedFromIndex)
             {
                var patches = m_repositoryManager.GetPatches(entry);
                var patchContent = m_repositoryManager.GetPatchContent(patches);
