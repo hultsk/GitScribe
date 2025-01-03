@@ -10,11 +10,10 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="8.0.1" />
-    <PackageReference Include="Microsoft.SemanticKernel" Version="1.22.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\GitScribe.Utils\GitScribe.Utils.csproj" />
+    <ProjectReference Include="..\GitScribe.Core\GitScribe.Core.csproj" />
   </ItemGroup>
 
 </Project>

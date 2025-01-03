@@ -1,10 +1,46 @@
-﻿namespace GitScribe.Debug
+﻿using GitScribe.Core;
+using GitScribe.Utils;
+using LibGit2Sharp;
+using Microsoft.Extensions.Configuration;
+using Microsoft.SemanticKernel;
+using System.Text;
+
+namespace GitScribe.Debug
 {
    internal class Program
    {
-      static void Main(string[] args)
+      private const string RepositoryPath = @"F:\hultsk\GitScribe";
+
+      private static async Task Main(string[] args)
       {
-         Console.WriteLine("Hello, World!");
+         IConfiguration configuration = SetupConfiguration();
+
+         string endpoint = configuration["AzureOpenAI:Endpoint"] ?? throw new InvalidOperationException("AzureOpenAI:Endpoint is not configured.");
+         string apiKey = configuration["AzureOpenAI:ApiKey"] ?? throw new InvalidOperationException("AzureOpenAI:ApiKey is not configured.");
+
+         IRepositoryManager repositoryManager = new RepositoryManager(RepositoryPath);
+         IGitScribeService gitScribe = new GitScribeService(repositoryManager, endpoint, apiKey);
+
+         var patchContent = gitScribe.CollectPatchContent();
+
+         if (!string.IsNullOrEmpty(patchContent))
+         {
+            var (title, description) = await gitScribe.GenerateCommitMessageAsync(patchContent);
+            Console.WriteLine($"Suggested commit title: {title}");
+            Console.WriteLine($"Suggested commit description: {description}");
+         }
+         else
+         {
+            Console.WriteLine("No relevant changes detected.");
+         }
       }
+
+
+      private static IConfiguration SetupConfiguration()
+      {
+         var builder = new ConfigurationBuilder().AddUserSecrets<Program>();
+         return builder.Build();
+      }
+
    }
 }
