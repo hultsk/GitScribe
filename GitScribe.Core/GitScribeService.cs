@@ -1,5 +1,4 @@
-﻿using GitScribe.Utils;
-using LibGit2Sharp;
+﻿using LibGit2Sharp;
 using Microsoft.SemanticKernel;
 using System.Text;
 

@@ -1,6 +1,6 @@
 ﻿using LibGit2Sharp;
 
-namespace GitScribe.Utils;
+namespace GitScribe.Core;
 
 /// <summary>
 /// Defines methods for managing and interacting with Git repositories.

@@ -1,5 +1,4 @@
 ﻿using GitScribe.Core;
-using GitScribe.Utils;
 using Microsoft.Extensions.Configuration;
 
 namespace GitScribe.Debug
