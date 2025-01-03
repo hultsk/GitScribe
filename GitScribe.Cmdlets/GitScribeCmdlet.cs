@@ -47,18 +47,13 @@ namespace GitScribe.Cmdlets
             return;
          }
 
-         // Generate commit message asynchronously
          var (title, description) = GenerateCommitMessage(patchContent);
-
-         // Present commit details and ask for user input
          PresentCommitDetails(title, description);
 
          string action;
          do
          {
             action = GetUserInputForAction();
-
-            // Clear console before each new action
             Console.Clear();
 
             switch (action.ToUpper())

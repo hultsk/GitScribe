@@ -47,15 +47,10 @@ public class RepositoryManager : IRepositoryManager
 
       using (var repo = new Repository(m_repositoryPath))
       {
-         // Check if the repository is dirty (has uncommitted changes)
          if (repo.RetrieveStatus().Any())
          {
             var signature = repo.Config.BuildSignature(DateTimeOffset.Now);
-
-            // Combine the title and description
             var fullCommitMessage = $"{commitTitle}\n\n{commitDescription}";
-
-            // Create the commit with title and description
             var commit = repo.Commit(fullCommitMessage, signature, signature);
          }
          else

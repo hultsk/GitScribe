@@ -32,8 +32,6 @@ namespace GitScribe.Debug
                repositoryManager.CommitChanges(title, description);
             else
                Console.WriteLine("No changes were committed.");
-
-
          }
          else
          {
