@@ -3,7 +3,7 @@
 Git Helper Bot with AI-Powered Commit Message Suggestions
 
 ## Overview:
-Create a Git helper bot that analyzes the changes made in a Git repository and provides intelligent suggestions for commit messages. The bot can use OpenAI's language model to generate relevant and descriptive commit messages based on the modifications made to the codebase.
+Git helper bot that analyzes the changes made in a Git repository and provides intelligent suggestions for commit messages. The bot uses OpenAI's language model to generate relevant and descriptive commit messages based on the modifications made to the codebase.
 
 ## Key Features:
 
