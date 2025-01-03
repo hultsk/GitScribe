@@ -1,9 +1,6 @@
 ﻿using GitScribe.Core;
 using GitScribe.Utils;
-using LibGit2Sharp;
 using Microsoft.Extensions.Configuration;
-using Microsoft.SemanticKernel;
-using System.Text;
 
 namespace GitScribe.Debug
 {
@@ -35,12 +32,10 @@ namespace GitScribe.Debug
          }
       }
 
-
       private static IConfiguration SetupConfiguration()
       {
          var builder = new ConfigurationBuilder().AddUserSecrets<Program>();
          return builder.Build();
       }
-
    }
 }
