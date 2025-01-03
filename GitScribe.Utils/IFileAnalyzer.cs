@@ -1,6 +1,6 @@
 ﻿using LibGit2Sharp;
 
-namespace GitScribe.Debug.Utils;
+namespace GitScribe.Utils;
 
 /// <summary>
 /// Defines methods for analyzing file changes and retrieving patch information in a Git repository.

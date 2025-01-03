@@ -1,6 +1,6 @@
 ﻿using LibGit2Sharp;
 
-namespace GitScribe.Debug.Utils;
+namespace GitScribe.Utils;
 
 public class RepositoryManager : IRepositoryManager
 {

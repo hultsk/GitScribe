@@ -1,7 +1,7 @@
 ﻿using LibGit2Sharp;
 using System.Text;
 
-namespace GitScribe.Debug.Utils;
+namespace GitScribe.Utils;
 
 public class FileAnalyzer : IFileAnalyzer
 {
