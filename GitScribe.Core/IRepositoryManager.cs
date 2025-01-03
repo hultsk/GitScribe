@@ -25,6 +25,17 @@ public interface IRepositoryManager
    /// </returns>
    string GetPatchContent(IEnumerable<Patch> patches);
 
+   /// <summary>
+   /// Commits the changes in the repository with a specified title and description for the commit message.
+   /// </summary>
+   /// <param name="commitTitle">The title of the commit message. This should be a concise summary, ideally 50 characters or less.</param>
+   /// <param name="commitDescription">The description of the commit message, providing additional context or details about the changes.</param>
+   /// <exception cref="ArgumentException">
+   /// Thrown when either <paramref name="commitTitle"/> or <paramref name="commitDescription"/> is null or empty.
+   /// </exception>
+   /// <exception cref="InvalidOperationException">
+   /// Thrown when there are no changes to commit in the repository.
+   /// </exception>
    void CommitChanges(string commitTitle, string commitDescription);
 
    /// <summary>
