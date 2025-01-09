@@ -29,10 +29,3 @@ Git helper bot that analyzes the changes made in a Git repository and provides i
 3. The bot analyzes the modifications and generates one or more suggested commit messages based on the detected changes.
 4. The user reviews the suggested commit messages, makes any necessary adjustments, and selects one for the commit.
 5. The changes are committed to the repository with the chosen commit message.
-
-## Development Steps:
-
-* Set up a C# project and integrate Git functionality using libraries like LibGit2Sharp for interacting with Git repositories.
-* Implement logic to analyze changes in the repository and extract relevant information for commit message generation.
-* Integrate OpenAI’s language model to generate commit message suggestions based on the detected changes.
-* Develop a user interface for interacting with the Git helper bot and displaying suggested commit messages.
