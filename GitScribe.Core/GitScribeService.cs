@@ -9,8 +9,8 @@ namespace GitScribe.Core
       private readonly Kernel m_kernel;
       private readonly IRepositoryManager m_repositoryManager;
 
-      private const string DeploymentName = "gpt-4";
-      private const string ModelId = "gpt-4";
+      private const string DeploymentName = "gitscribe";
+      private const string ModelId = "gpt-4o";
 
       public GitScribeService(IRepositoryManager repositoryManager, string endpoint, string apiKey)
       {
