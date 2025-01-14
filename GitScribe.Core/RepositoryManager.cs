@@ -42,7 +42,7 @@ public class RepositoryManager : IRepositoryManager
       if (string.IsNullOrWhiteSpace(commitTitle))
          throw new ArgumentException("Commit title cannot be null or empty.", nameof(commitTitle));
 
-      if (string.IsNullOrWhiteSpace(commitDescription))
+      if (string.IsNullOrEmpty(commitDescription))
          throw new ArgumentException("Commit description cannot be null or empty.", nameof(commitDescription));
 
       using (var repo = new Repository(m_repositoryPath))

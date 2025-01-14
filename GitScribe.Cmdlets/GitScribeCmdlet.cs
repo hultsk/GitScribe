@@ -94,8 +94,8 @@ namespace GitScribe.Cmdlets
       private void PresentCommitDetails(string title, string description)
       {
          WriteObject("---- Commit Preview ----");
-         WriteObject($"Title:\n{title}");
-         WriteObject($"Description:\n{description}");
+         WriteObject($"Title:\n {title}");
+         WriteObject($"Description:\n {description}");
          WriteObject("------------------------");
       }
 
@@ -113,13 +113,13 @@ namespace GitScribe.Cmdlets
 
       private (string title, string description) EditCommitMessage(string currentTitle, string currentDescription)
       {
-         var newTitle = ReadLine($"Enter new commit title\nCurrent: {currentTitle}");
-         var titleToUse = string.IsNullOrWhiteSpace(newTitle) 
+         var newTitle = ReadLine($"Enter new commit title\n Current: {currentTitle}");
+         var titleToUse = string.IsNullOrEmpty(newTitle) 
             ? currentTitle 
             : newTitle;
 
-         var newDescription = ReadLine($"Enter new commit description\nCurrent: {currentDescription}");
-         var descriptionToUse = string.IsNullOrWhiteSpace(newDescription) 
+         var newDescription = ReadLine($"Enter new commit description\n Current: {currentDescription}");
+         var descriptionToUse = string.IsNullOrEmpty(newDescription) 
             ? currentDescription 
             : newDescription;
 
