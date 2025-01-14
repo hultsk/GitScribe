@@ -15,7 +15,7 @@ namespace GitScribe.Debug
          string apiKey = configuration["AzureOpenAI:ApiKey"] ?? throw new InvalidOperationException("AzureOpenAI:ApiKey is not configured.");
 
          IRepositoryManager repositoryManager = new RepositoryManager(RepositoryPath);
-         IGitScribeService gitScribe = new GitScribeService(repositoryManager, endpoint, apiKey);
+         IGitScribeService gitScribe = new GitScribeService(repositoryManager, endpoint, apiKey, "gitscribe", "gpt-4o");
 
          var patchContent = gitScribe.CollectPatchContent();
 
