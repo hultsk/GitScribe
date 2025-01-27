@@ -1,0 +1,30 @@
+﻿diff --git a/GitScribe.Tests/GitScribe.Core.Tests/MockPatch.cs b/GitScribe.Tests/GitScribe.Core.Tests/MockPatch.cs
+new file mode 100644
+index 0000000..6a0331c
+--- /dev/null
++++ b/GitScribe.Tests/GitScribe.Core.Tests/MockPatch.cs
+@@ -0,0 +1,23 @@
++﻿using LibGit2Sharp;
++using System.Text;
++
++namespace GitScribe.Core.Tests;
++
++public class MockPatch : Patch
++{
++   public MockPatch(Dictionary<string, PatchEntryChanges> mockChanges, int linesAdded, int linesDeleted, string fullContent)
++   {
++      var changesField = typeof(Patch).GetField("changes", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
++      changesField?.SetValue(this, mockChanges);
++
++      var linesAddedField = typeof(Patch).GetField("linesAdded", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
++      linesAddedField?.SetValue(this, linesAdded);
++
++      var linesDeletedField = typeof(Patch).GetField("linesDeleted", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
++      linesDeletedField?.SetValue(this, linesDeleted);
++
++      var fullPatchBuilderField = typeof(Patch).GetField("fullPatchBuilder", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
++      var stringBuilder = new StringBuilder(fullContent);
++      fullPatchBuilderField?.SetValue(this, stringBuilder);
++   }
++}
+\ No newline at end of file

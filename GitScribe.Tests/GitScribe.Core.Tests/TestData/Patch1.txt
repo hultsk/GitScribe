@@ -1,0 +1,30 @@
+﻿diff --git a/GitScribe.Tests/GitScribe.Core.Tests/LineHelper.cs b/GitScribe.Tests/GitScribe.Core.Tests/LineHelper.cs
+new file mode 100644
+index 0000000..3e57891
+--- /dev/null
++++ b/GitScribe.Tests/GitScribe.Core.Tests/LineHelper.cs
+@@ -0,0 +1,23 @@
++﻿using LibGit2Sharp;
++using System.Reflection;
++
++namespace GitScribe.Core.Tests;
++
++public static class LineHelper
++{
++   public static Line CreateLine(int lineNumber, string content)
++   {
++      var constructor = typeof(Line).GetConstructor(
++          BindingFlags.NonPublic | BindingFlags.Instance,
++          null,
++          [typeof(int), typeof(string)],
++          null);
++
++      if (constructor == null)
++      {
++         throw new InvalidOperationException("The Line constructor could not be found.");
++      }
++      // Invoke the constructor to create a Line instance
++      return (Line)constructor.Invoke([lineNumber, content]);
++   }
++}
+\ No newline at end of file
