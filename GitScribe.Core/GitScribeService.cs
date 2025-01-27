@@ -48,25 +48,25 @@ namespace GitScribe.Core
             throw new ArgumentException("Patch content cannot be null or empty.", nameof(patchContent));
 
          var promptTemplate = $@"
-            Please generate a concise Git commit message based on the following changes:
+Please generate a concise Git commit message based on the following changes:
 
-            Changes:
-            {patchContent}
+Changes:
+{patchContent}
 
-            The output should include:
-            - A commit title:
-               - Written in imperative mood
-               - Clear and concise
-               - Ideally 50 characters or less
+The output should include:
+- A commit title:
+   - Written in imperative mood
+   - Clear and concise
+   - Ideally 50 characters or less
 
-            - A commit description:
-               - Written in imperative mood
-               - Provides a clear summary of the changes
-               - Includes any additional context that might be helpful
+- A commit description:
+   - Written in imperative mood
+   - Provides a clear summary of the changes
+   - Includes any additional context that might be helpful
 
-            Format your response as follows:
-            Commit title: [Your title here]
-            Commit description: [Your description here]
+Format your response as follows:
+Commit title: [Your title here]
+Commit description: [Your description here]
         ";
 
          var result = await m_kernel.InvokePromptAsync(promptTemplate);
