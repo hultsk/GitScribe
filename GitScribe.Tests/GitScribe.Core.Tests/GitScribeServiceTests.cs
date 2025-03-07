@@ -20,7 +20,7 @@ public class GitScribeServiceTests
    public void Constructor_ShouldThrowException_WhenEndpointIsNullOrWhiteSpace()
    {
       // Act
-      new GitScribeService(m_repositoryManagerMock.Object, string.Empty, "apiKey", "deploymentName", "modelId");
+      new GitScribeService(m_repositoryManagerMock.Object, new(string.Empty, "apiKey", "deploymentName", "modelId"));
    }
 
    [TestMethod]
@@ -28,7 +28,7 @@ public class GitScribeServiceTests
    public void Constructor_ShouldThrowException_WhenApiKeyIsNullOrWhiteSpace()
    {
       // Act
-      new GitScribeService(m_repositoryManagerMock.Object, "endpoint", string.Empty, "deploymentName", "modelId");
+      new GitScribeService(m_repositoryManagerMock.Object, new("endpoint", string.Empty, "deploymentName", "modelId"));
    }
 
    [TestMethod]
@@ -36,7 +36,7 @@ public class GitScribeServiceTests
    public void Constructor_ShouldThrowException_WhenDeploymentNameIsNullOrWhiteSpace()
    {
       // Act
-      new GitScribeService(m_repositoryManagerMock.Object, "endpoint", "apiKey", string.Empty, "modelId");
+      new GitScribeService(m_repositoryManagerMock.Object, new("endpoint", "apiKey", string.Empty, "modelId"));
    }
 
    [TestMethod]
@@ -44,7 +44,7 @@ public class GitScribeServiceTests
    public void Constructor_ShouldThrowException_WhenModelIdIsNullOrWhiteSpace()
    {
       // Act
-      new GitScribeService(m_repositoryManagerMock.Object, "endpoint", "apiKey", "deploymentName", string.Empty);
+      new GitScribeService(m_repositoryManagerMock.Object, new("endpoint", "apiKey", "deploymentName", string.Empty));
    }
 
    [TestMethod]
@@ -52,7 +52,7 @@ public class GitScribeServiceTests
    public void Constructor_ShouldThrowException_WhenRepositoryManagerIsNull()
    {
       // Act
-      new GitScribeService(default!, "endpoint", "apiKey", "deploymentName", "modelId");
+      new GitScribeService(default!, new("endpoint", "apiKey", "deploymentName", "modelId"));
    }
 
    [TestMethod]
@@ -72,7 +72,7 @@ public class GitScribeServiceTests
       var repositoryManagerMock = new Mock<IRepositoryManager>();
       repositoryManagerMock.Setup(m => m.RetrieveStatus()).Returns(new[] { statusEntryMock });
 
-      var sut = new GitScribeService(repositoryManagerMock.Object, "endpoint", "apiKey", "deploymentName", "modelId");
+      var sut = new GitScribeService(repositoryManagerMock.Object, new("endpoint", "apiKey", "deploymentName", "modelId"));
 
       // Act
       var result = sut.CollectPatchContent();
@@ -101,7 +101,7 @@ public class GitScribeServiceTests
       repositoryManagerMock.Setup(m => m.GetPatches(statusEntryMock)).Returns(mockPatches);
       repositoryManagerMock.Setup(m => m.GetPatchContent(mockPatches)).Returns(expectedContent);
 
-      var sut = new GitScribeService(repositoryManagerMock.Object, "endpoint", "apiKey", "deploymentName", "modelId");
+      var sut = new GitScribeService(repositoryManagerMock.Object, new("endpoint", "apiKey", "deploymentName", "modelId"));
 
       // Act
       var result = sut.CollectPatchContent();
@@ -121,7 +121,7 @@ public class GitScribeServiceTests
       var expectedContent = CombinePatchContent(mockPatches);
       var repositoryManagerMock = new Mock<IRepositoryManager>();
 
-      var sut = new GitScribeService(repositoryManagerMock.Object, "endpoint", "apiKey", "deploymentName", "modelId");
+      var sut = new GitScribeService(repositoryManagerMock.Object, new("endpoint", "apiKey", "deploymentName", "modelId"));
       
       var result = sut.GeneratePromptMessage(expectedContent);
 
