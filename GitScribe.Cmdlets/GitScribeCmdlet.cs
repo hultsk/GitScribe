@@ -10,16 +10,16 @@ namespace GitScribe.Cmdlets
       [Parameter(Mandatory = true)]
       public required string RepositoryPath { get; set; }
 
-      [Parameter(Mandatory = true)]
+      [Parameter(Mandatory = false)]
       public required string Endpoint { get; set; }
 
-      [Parameter(Mandatory = true)]
+      [Parameter(Mandatory = false)]
       public required string ApiKey { get; set; }
 
-      [Parameter(Mandatory = true)]
+      [Parameter(Mandatory = false)]
       public required string DeploymentName { get; set; }
 
-      [Parameter(Mandatory = true)]
+      [Parameter(Mandatory = false)]
       public required string ModelId { get; set; }
 
       private IRepositoryManager? m_repositoryManager;
@@ -31,8 +31,8 @@ namespace GitScribe.Cmdlets
 
          try
          {
-            m_repositoryManager = new RepositoryManager(RepositoryPath);
-            m_gitScribe = new GitScribeService(m_repositoryManager, Endpoint, ApiKey, DeploymentName, ModelId);
+            m_repositoryManager = new RepositoryManager(new (RepositoryPath));
+            m_gitScribe = new GitScribeService(m_repositoryManager, new(Endpoint, ApiKey, DeploymentName, ModelId));
          }
          catch (Exception ex)
          {

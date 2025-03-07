@@ -9,18 +9,12 @@ namespace GitScribe.Core
       private readonly Kernel m_kernel;
       private readonly IRepositoryManager m_repositoryManager;
 
-      public GitScribeService(IRepositoryManager repositoryManager, string endpoint, string apiKey, string deploymentName, string modelId)
+      public GitScribeService(IRepositoryManager repositoryManager, GitScribeSettings gitScribeSettings)
       {
-         if (string.IsNullOrWhiteSpace(endpoint))
-            throw new ArgumentException("Endpoint cannot be null or empty.", nameof(endpoint));
-         if (string.IsNullOrWhiteSpace(apiKey))
-            throw new ArgumentException("API key cannot be null or empty.", nameof(apiKey));
-         if (string.IsNullOrWhiteSpace(deploymentName))
-            throw new ArgumentException("Deployment name cannot be null or empty.", nameof(deploymentName));
-         if (string.IsNullOrWhiteSpace(modelId))
-            throw new ArgumentException("Model ID cannot be null or empty.", nameof(modelId));
+         if (gitScribeSettings == null) 
+            throw new ArgumentException($"GitScribeSettings cannot be null or empty.", nameof(gitScribeSettings));
 
-         m_kernel = Kernel.CreateBuilder().AddAzureOpenAIChatCompletion(deploymentName, endpoint, apiKey, null, modelId, new HttpClient()).Build();
+         m_kernel = Kernel.CreateBuilder().AddAzureOpenAIChatCompletion(gitScribeSettings.DeploymentName, gitScribeSettings.Endpoint, gitScribeSettings.ApiKey, null, gitScribeSettings.ModelId, new HttpClient()).Build();
          m_repositoryManager = repositoryManager ?? throw new ArgumentNullException(nameof(repositoryManager));
       }
 
