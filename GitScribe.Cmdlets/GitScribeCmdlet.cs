@@ -59,10 +59,19 @@ namespace GitScribe.Cmdlets
          string action;
          do
          {
-            action = GetUserInputForAction();
+            ConsoleKeyInfo keyInfo = GetUserInputForActionKey();
             Console.Clear();
 
-            switch (action.ToUpper())
+            action = keyInfo.Key switch
+            {
+               ConsoleKey.R => "R",
+               ConsoleKey.E => "E",
+               ConsoleKey.C or ConsoleKey.Enter => "C",
+               ConsoleKey.D or ConsoleKey.Escape => "D",
+               _ => ""
+            };
+
+            switch (action)
             {
                case "R":
                   (title, description) = RegenerateCommitMessage(patchContent);
@@ -79,10 +88,21 @@ namespace GitScribe.Cmdlets
                   DiscardChanges();
                   break;
                default:
-                  WriteWarning("Invalid input. Please choose a valid option (R, E, C, D).");
+                  WriteWarning("Invalid input. " + GetActions());
                   break;
             }
-         } while (action.ToUpper() != "C" && action.ToUpper() != "D");
+         } while (action != "C" && action != "D");
+      }
+
+      private ConsoleKeyInfo GetUserInputForActionKey()
+      {
+         Console.WriteLine("Choose an action: " + GetActions());
+         return Console.ReadKey(intercept: true);
+      }
+
+      private string GetActions()
+      {
+         return "(R)egenerate, (E)dit, (C)ommit[Enter], (D)iscard[Escape]";
       }
 
       private (string title, string description) GenerateCommitMessage(string patchContent)
@@ -97,12 +117,6 @@ namespace GitScribe.Cmdlets
          WriteObject($"Title:\n {title}");
          WriteObject($"Description:\n {description}");
          WriteObject("------------------------");
-      }
-
-      private string GetUserInputForAction()
-      {
-         WriteObject("(R to regenerate, E to edit, C to commit, D to discard)");
-         return Console.ReadLine()!;
       }
 
       private (string title, string description) RegenerateCommitMessage(string patchContent)
