@@ -56,14 +56,46 @@ public class GitScribeServiceTests
    }
 
    [TestMethod]
-   public void CollectPatchContent_ShouldReturnCombinedPatchContent()
+   [DataRow(FileStatus.ModifiedInWorkdir)]
+   [DataRow(FileStatus.RenamedInWorkdir)]
+   [DataRow(FileStatus.TypeChangeInWorkdir)]
+   [DataRow(FileStatus.NewInWorkdir)]
+   [DataRow(FileStatus.DeletedFromWorkdir)]
+   public void CollectPatchContent_WithWorkDirFileStatus_ShouldReturnEmptyPatchContent(FileStatus fileStatus)
    {
       // Arrange
       var patchFiles = GetTestPatchFiles();
       var mockPatches = CreateMockPatchesFromFiles(patchFiles);
       var expectedContent = CombinePatchContent(mockPatches);
 
-      var statusEntryMock = CreateMockStatusEntry(FileStatus.ModifiedInIndex);
+      var statusEntryMock = CreateMockStatusEntry(fileStatus);
+      var repositoryManagerMock = new Mock<IRepositoryManager>();
+      repositoryManagerMock.Setup(m => m.RetrieveStatus()).Returns(new[] { statusEntryMock });
+
+      var sut = new GitScribeService(repositoryManagerMock.Object, "endpoint", "apiKey", "deploymentName", "modelId");
+
+      // Act
+      var result = sut.CollectPatchContent();
+
+      // Assert
+      Assert.IsNotNull(result);
+      Assert.AreEqual("", result);
+   }
+
+   [TestMethod]
+   [DataRow(FileStatus.ModifiedInIndex)]
+   [DataRow(FileStatus.RenamedInIndex)]
+   [DataRow(FileStatus.TypeChangeInIndex)]
+   [DataRow(FileStatus.NewInIndex)]
+   [DataRow(FileStatus.DeletedFromIndex)]
+   public void CollectPatchContent_WithIndexFileStatus_ShouldReturnCombinedPatchContent(FileStatus fileStatus)
+   {
+      // Arrange
+      var patchFiles = GetTestPatchFiles();
+      var mockPatches = CreateMockPatchesFromFiles(patchFiles);
+      var expectedContent = CombinePatchContent(mockPatches);
+
+      var statusEntryMock = CreateMockStatusEntry(fileStatus);
       var repositoryManagerMock = new Mock<IRepositoryManager>();
       repositoryManagerMock.Setup(m => m.RetrieveStatus()).Returns(new[] { statusEntryMock });
       repositoryManagerMock.Setup(m => m.GetPatches(statusEntryMock)).Returns(mockPatches);
@@ -77,6 +109,24 @@ public class GitScribeServiceTests
       // Assert
       Assert.IsNotNull(result);
       Assert.AreEqual(expectedContent.TrimEnd(), result.TrimEnd());
+   }
+
+
+   [TestMethod]
+   public void GenerateCommitMessageAsync_WithPatches_GeneratesCorrectCommitMessage()
+   {
+      var expected = GetPromptTemplate();
+      var patchFiles = GetTestPatchFiles();
+      var mockPatches = CreateMockPatchesFromFiles(patchFiles);
+      var expectedContent = CombinePatchContent(mockPatches);
+      var repositoryManagerMock = new Mock<IRepositoryManager>();
+
+      var sut = new GitScribeService(repositoryManagerMock.Object, "endpoint", "apiKey", "deploymentName", "modelId");
+      
+      var result = sut.GeneratePromptMessage(expectedContent);
+
+      Assert.IsNotNull(result);
+      Assert.AreEqual(expected, result);
    }
 
    // Helper method to get test patch file paths
@@ -98,6 +148,18 @@ public class GitScribeServiceTests
       }
 
       return patchFiles;
+   }
+
+   // Helper method to get PromptTemplate Content
+   private static string GetPromptTemplate()
+   {
+      string projectDirectory = Directory.GetParent(Environment.CurrentDirectory)!.Parent!.Parent!.FullName;
+      var file = Path.Combine(projectDirectory, "TestData", "PromptTemplate.txt");
+      
+      if (!File.Exists(file))
+         throw new FileNotFoundException($"Test patch file not found: {file}");
+
+      return File.ReadAllText(file);
    }
 
    // Helper to create mock status entries
@@ -133,26 +195,4 @@ public class GitScribeServiceTests
       }
       return stringBuilder.ToString();
    }
-
-   //[TestMethod]
-   //public void CollectPatchContent_ShouldReturnEmptyString_WhenNoRelevantFileStatus()
-   //{
-   //   // Arrange
-   //   var fileStatusEntries = new List<FileStatusEntry>
-   //  {
-   //      new FileStatusEntry { State = FileStatus.Unchanged },
-   //      new FileStatusEntry { State = FileStatus.Ignored }
-   //  };
-
-   //   m_repositoryManagerMock.Setup(m => m.RetrieveStatus()).Returns(fileStatusEntries);
-
-   //   var service = new GitScribeService(m_repositoryManagerMock.Object, "endpoint", "apiKey", "deploymentName", "modelId");
-
-   //   // Act
-   //   var result = service.CollectPatchContent();
-
-   //   // Assert
-   //   Assert.IsNotNull(result);
-   //   Assert.AreEqual(string.Empty, result);
-   //}
 }

@@ -1,0 +1,80 @@
+﻿
+Please generate a concise Git commit message based on the following changes:
+
+Changes:
+diff --git a/GitScribe.Tests/GitScribe.Core.Tests/LineHelper.cs b/GitScribe.Tests/GitScribe.Core.Tests/LineHelper.cs
+new file mode 100644
+index 0000000..3e57891
+--- /dev/null
++++ b/GitScribe.Tests/GitScribe.Core.Tests/LineHelper.cs
+@@ -0,0 +1,23 @@
++﻿using LibGit2Sharp;
++using System.Reflection;
++
++namespace GitScribe.Core.Tests;
++
++public static class LineHelper
++{
++   public static Line CreateLine(int lineNumber, string content)
++   {
++      var constructor = typeof(Line).GetConstructor(
++          BindingFlags.NonPublic | BindingFlags.Instance,
++          null,
++          [typeof(int), typeof(string)],
++          null);
++
++      if (constructor == null)
++      {
++         throw new InvalidOperationException("The Line constructor could not be found.");
++      }
++      // Invoke the constructor to create a Line instance
++      return (Line)constructor.Invoke([lineNumber, content]);
++   }
++}
+\ No newline at end of file
+diff --git a/GitScribe.Tests/GitScribe.Core.Tests/MockPatch.cs b/GitScribe.Tests/GitScribe.Core.Tests/MockPatch.cs
+new file mode 100644
+index 0000000..6a0331c
+--- /dev/null
++++ b/GitScribe.Tests/GitScribe.Core.Tests/MockPatch.cs
+@@ -0,0 +1,23 @@
++﻿using LibGit2Sharp;
++using System.Text;
++
++namespace GitScribe.Core.Tests;
++
++public class MockPatch : Patch
++{
++   public MockPatch(Dictionary<string, PatchEntryChanges> mockChanges, int linesAdded, int linesDeleted, string fullContent)
++   {
++      var changesField = typeof(Patch).GetField("changes", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
++      changesField?.SetValue(this, mockChanges);
++
++      var linesAddedField = typeof(Patch).GetField("linesAdded", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
++      linesAddedField?.SetValue(this, linesAdded);
++
++      var linesDeletedField = typeof(Patch).GetField("linesDeleted", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
++      linesDeletedField?.SetValue(this, linesDeleted);
++
++      var fullPatchBuilderField = typeof(Patch).GetField("fullPatchBuilder", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
++      var stringBuilder = new StringBuilder(fullContent);
++      fullPatchBuilderField?.SetValue(this, stringBuilder);
++   }
++}
+\ No newline at end of file
+
+
+The output should include:
+- A commit title:
+   - Written in imperative mood
+   - Clear and concise
+   - Ideally 50 characters or less
+
+- A commit description:
+   - Written in imperative mood
+   - Provides a clear summary of the changes
+   - Includes any additional context that might be helpful
+
+Format your response as follows:
+Commit title: [Your title here]
+Commit description: [Your description here]
