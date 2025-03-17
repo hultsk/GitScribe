@@ -20,7 +20,7 @@ public class GitScribeCommitAssistantTests
    public void Constructor_ShouldThrowException_WhenEndpointIsNullOrWhiteSpace()
    {
       // Act
-      new GitScribeCommitAssistant(m_repositoryManagerMock.Object, new(string.Empty, "apiKey", "deploymentName", "modelId"));
+      new CommitAssistant(m_repositoryManagerMock.Object, new(string.Empty, "apiKey", "deploymentName", "modelId"));
    }
 
    [TestMethod]
@@ -28,7 +28,7 @@ public class GitScribeCommitAssistantTests
    public void Constructor_ShouldThrowException_WhenApiKeyIsNullOrWhiteSpace()
    {
       // Act
-      new GitScribeCommitAssistant(m_repositoryManagerMock.Object, new("endpoint", string.Empty, "deploymentName", "modelId"));
+      new CommitAssistant(m_repositoryManagerMock.Object, new("endpoint", string.Empty, "deploymentName", "modelId"));
    }
 
    [TestMethod]
@@ -36,7 +36,7 @@ public class GitScribeCommitAssistantTests
    public void Constructor_ShouldThrowException_WhenDeploymentNameIsNullOrWhiteSpace()
    {
       // Act
-      new GitScribeCommitAssistant(m_repositoryManagerMock.Object, new("endpoint", "apiKey", string.Empty, "modelId"));
+      new CommitAssistant(m_repositoryManagerMock.Object, new("endpoint", "apiKey", string.Empty, "modelId"));
    }
 
    [TestMethod]
@@ -44,7 +44,7 @@ public class GitScribeCommitAssistantTests
    public void Constructor_ShouldThrowException_WhenModelIdIsNullOrWhiteSpace()
    {
       // Act
-      new GitScribeCommitAssistant(m_repositoryManagerMock.Object, new("endpoint", "apiKey", "deploymentName", string.Empty));
+      new CommitAssistant(m_repositoryManagerMock.Object, new("endpoint", "apiKey", "deploymentName", string.Empty));
    }
 
    [TestMethod]
@@ -52,7 +52,7 @@ public class GitScribeCommitAssistantTests
    public void Constructor_ShouldThrowException_WhenRepositoryManagerIsNull()
    {
       // Act
-      new GitScribeCommitAssistant(default!, new("endpoint", "apiKey", "deploymentName", "modelId"));
+      new CommitAssistant(default!, new("endpoint", "apiKey", "deploymentName", "modelId"));
    }
 
    [TestMethod]
@@ -72,7 +72,7 @@ public class GitScribeCommitAssistantTests
       var repositoryManagerMock = new Mock<IRepositoryManager>();
       repositoryManagerMock.Setup(m => m.RetrieveStatus()).Returns(new[] { statusEntryMock });
 
-      var sut = new GitScribeCommitAssistant(repositoryManagerMock.Object, new("endpoint", "apiKey", "deploymentName", "modelId"));
+      var sut = new CommitAssistant(repositoryManagerMock.Object, new("endpoint", "apiKey", "deploymentName", "modelId"));
 
       // Act
       var result = sut.CollectPatchContent();
@@ -101,7 +101,7 @@ public class GitScribeCommitAssistantTests
       repositoryManagerMock.Setup(m => m.GetPatches(statusEntryMock)).Returns(mockPatches);
       repositoryManagerMock.Setup(m => m.GetPatchContent(mockPatches)).Returns(expectedContent);
 
-      var sut = new GitScribeCommitAssistant(repositoryManagerMock.Object, new("endpoint", "apiKey", "deploymentName", "modelId"));
+      var sut = new CommitAssistant(repositoryManagerMock.Object, new("endpoint", "apiKey", "deploymentName", "modelId"));
 
       // Act
       var result = sut.CollectPatchContent();
@@ -121,7 +121,7 @@ public class GitScribeCommitAssistantTests
       var expectedContent = CombinePatchContent(mockPatches);
       var repositoryManagerMock = new Mock<IRepositoryManager>();
 
-      var sut = new GitScribeCommitAssistant(repositoryManagerMock.Object, new("endpoint", "apiKey", "deploymentName", "modelId"));
+      var sut = new CommitAssistant(repositoryManagerMock.Object, new("endpoint", "apiKey", "deploymentName", "modelId"));
       
       var result = sut.GeneratePromptMessage(expectedContent);
 
