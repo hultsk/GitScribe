@@ -4,12 +4,12 @@ using System.Text;
 
 namespace GitScribe.Core
 {
-   public class GitScribeCommitAssistant : IGitScribeCommitAssistant
+   public class CommitAssistant : ICommitAssistant
    {
       private readonly Kernel m_kernel;
       private readonly IRepositoryManager m_repositoryManager;
 
-      public GitScribeCommitAssistant(IRepositoryManager repositoryManager, GitScribeSettings gitScribeSettings)
+      public CommitAssistant(IRepositoryManager repositoryManager, GitScribeSettings gitScribeSettings)
       {
          if (gitScribeSettings == null) 
             throw new ArgumentException($"GitScribeSettings cannot be null or empty.", nameof(gitScribeSettings));
