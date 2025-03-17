@@ -7,6 +7,13 @@ namespace GitScribe.Core;
 /// </summary>
 public interface IRepositoryManager
 {
+   IEnumerable<string> GetRepositoryIds();
+   RepositoryInformation? GetRepositoryInformation(string repositoryId);
+   IEnumerable<(string Id, RepositoryInformation Info)> GetAllRepositoryInformation();
+   bool AddRepository(RepositoryConfig config);
+   bool RemoveRepository(string repositoryId);
+   bool UpdateRepository(RepositoryConfig config);
+
    /// <summary>
    /// Retrieves the patches (differences) for a specified file in the Git repository.
    /// </summary>
