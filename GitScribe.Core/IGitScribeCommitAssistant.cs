@@ -1,9 +1,9 @@
 ﻿namespace GitScribe.Core
 {
    /// <summary>
-   /// Interface for GitScribe service to analyze repositories and generate commit messages.
+   /// Interface for GitScribe Commit Assistant to analyze repositories and generate commit messages.
    /// </summary>
-   public interface IGitScribeService
+   public interface IGitScribeCommitAssistant
    {
       /// <summary>
       /// Analyzes the repository and collects patch content for relevant files.

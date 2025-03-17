@@ -23,7 +23,7 @@ namespace GitScribe.Cmdlets
       public required string ModelId { get; set; }
 
       private IRepositoryManager? m_repositoryManager;
-      private IGitScribeService? m_gitScribe;
+      private IGitScribeCommitAssistant? m_commitAssistant;
 
       protected override void BeginProcessing()
       {
@@ -32,7 +32,7 @@ namespace GitScribe.Cmdlets
          try
          {
             m_repositoryManager = new RepositoryManager(new (RepositoryPath));
-            m_gitScribe = new GitScribeService(m_repositoryManager, new(Endpoint, ApiKey, DeploymentName, ModelId));
+            m_commitAssistant = new GitScribeCommitAssistant(m_repositoryManager, new(Endpoint, ApiKey, DeploymentName, ModelId));
          }
          catch (Exception ex)
          {
@@ -45,7 +45,7 @@ namespace GitScribe.Cmdlets
       {
          base.ProcessRecord();
 
-         var patchContent = m_gitScribe!.CollectPatchContent();
+         var patchContent = m_commitAssistant!.CollectPatchContent();
 
          if (string.IsNullOrWhiteSpace(patchContent))
          {
@@ -107,7 +107,7 @@ namespace GitScribe.Cmdlets
 
       private (string title, string description) GenerateCommitMessage(string patchContent)
       {
-         var commitMessage = m_gitScribe!.GenerateCommitMessageAsync(patchContent).Result;
+         var commitMessage = m_commitAssistant!.GenerateCommitMessageAsync(patchContent).Result;
          return (commitMessage.Title, commitMessage.Description);
       }
 
@@ -121,7 +121,7 @@ namespace GitScribe.Cmdlets
 
       private (string title, string description) RegenerateCommitMessage(string patchContent)
       {
-         var newCommitMessage = m_gitScribe!.GenerateCommitMessageAsync(patchContent).Result;
+         var newCommitMessage = m_commitAssistant!.GenerateCommitMessageAsync(patchContent).Result;
          return (newCommitMessage.Title, newCommitMessage.Description);
       }
 
