@@ -1,5 +1,6 @@
 ﻿using GitScribe.Core;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 
 namespace GitScribe.Debug
 {
@@ -14,8 +15,23 @@ namespace GitScribe.Debug
          string endpoint = configuration["AzureOpenAI:Endpoint"] ?? throw new InvalidOperationException("AzureOpenAI:Endpoint is not configured.");
          string apiKey = configuration["AzureOpenAI:ApiKey"] ?? throw new InvalidOperationException("AzureOpenAI:ApiKey is not configured.");
 
-         IRepositoryManager repositoryManager = new RepositoryManager(new(RepositoryPath));
-         IGitScribeCommitAssistant commitAssistant = new GitScribeCommitAssistant(repositoryManager, new(endpoint, apiKey, "gitscribe", "gpt-4o"));
+         var settings = new RepositorySettings();
+         settings.Repositories.Add(new RepositoryConfig
+         {
+            Id = "test-repo",
+            Name = "Test Repository",
+            Path = RepositoryPath,
+            IsActive = true
+         });
+         using var loggerFactory = LoggerFactory.Create(builder =>
+         {
+            builder.SetMinimumLevel(LogLevel.Information);
+         });
+
+         var logger = loggerFactory.CreateLogger<RepositoryManager>();
+
+         IRepositoryManager repositoryManager = new RepositoryManager(settings, logger);
+         ICommitAssistant commitAssistant = new CommitAssistant(repositoryManager, new(endpoint, apiKey, "gitscribe", "gpt-4o"));
 
          var patchContent = commitAssistant.CollectPatchContent();
 

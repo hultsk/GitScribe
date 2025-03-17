@@ -5,7 +5,7 @@ namespace GitScribe.Cmdlets
 {
    [Cmdlet("Git", "Scribe")]
    [OutputType(typeof(string))]
-   public class GitScribeCmdlet : Cmdlet
+   public class GitScribeCmdlet : PSCmdlet
    {
       [Parameter(Mandatory = true)]
       public required string RepositoryPath { get; set; }
@@ -23,7 +23,7 @@ namespace GitScribe.Cmdlets
       public required string ModelId { get; set; }
 
       private IRepositoryManager? m_repositoryManager;
-      private IGitScribeCommitAssistant? m_commitAssistant;
+      private ICommitAssistant? m_commitAssistant;
 
       protected override void BeginProcessing()
       {
@@ -31,8 +31,18 @@ namespace GitScribe.Cmdlets
 
          try
          {
-            m_repositoryManager = new RepositoryManager(new (RepositoryPath));
-            m_commitAssistant = new GitScribeCommitAssistant(m_repositoryManager, new(Endpoint, ApiKey, DeploymentName, ModelId));
+            var loggerFactory = new PowerShellLoggerFactory(this);
+            var settings = new RepositorySettings();
+            settings.Repositories.Add(new RepositoryConfig
+            {
+               Id = "test-repo",
+               Name = "Test Repository",
+               Path = RepositoryPath,
+               IsActive = true
+            });
+
+            m_repositoryManager = new RepositoryManager(settings, loggerFactory.CreateLogger<RepositoryManager>());
+            m_commitAssistant = new CommitAssistant(m_repositoryManager, new(Endpoint, ApiKey, DeploymentName, ModelId));
          }
          catch (Exception ex)
          {
