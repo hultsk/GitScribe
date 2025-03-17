@@ -15,7 +15,7 @@ namespace GitScribe.Service
               .ConfigureServices((hostContext, services) =>
               {
                  services.AddRepositoryManager(hostContext.Configuration);
-                 services.AddSingleton<ICommitAssistant, CommitAssistant>();
+                 //services.AddSingleton<ICommitAssistant, CommitAssistant>();
 
                  services.AddHostedService<GitScibreService>();
               });

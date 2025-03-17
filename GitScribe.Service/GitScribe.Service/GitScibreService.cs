@@ -7,13 +7,13 @@ namespace GitScribe.Service
    public class GitScibreService : BackgroundService
    {
       private readonly ILogger<GitScibreService> m_logger;
-      private readonly ICommitAssistant m_commitAssistant;
+      //private readonly ICommitAssistant m_commitAssistant;
       private readonly IRepositoryManager m_repositoryManager;
 
-      public GitScibreService(ILogger<GitScibreService> logger, ICommitAssistant commitAssistant, IRepositoryManager repositoryManager)
+      public GitScibreService(ILogger<GitScibreService> logger, /*ICommitAssistant commitAssistant,*/ IRepositoryManager repositoryManager)
       {
          m_logger = logger;
-         m_commitAssistant = commitAssistant;
+         //m_commitAssistant = commitAssistant;
          m_repositoryManager = repositoryManager;
       }
 
@@ -29,17 +29,17 @@ namespace GitScribe.Service
                var repoIds = m_repositoryManager.GetRepositoryIds();
                m_logger.LogInformation("Processing {Count} repositories", repoIds.Count());
 
-               //foreach (var repoId in repoIds)
-               //{
-               //   try
-               //   {
-               //      ProcessRepository(repoId);
-               //   }
-               //   catch (Exception repoEx)
-               //   {
-               //      m_logger.LogError(repoEx, "Error processing repository {RepositoryId}", repoId);
-               //   }
-               //}
+               foreach (var repoId in repoIds)
+               {
+                  try
+                  {
+                     ProcessRepository(repoId);
+                  }
+                  catch (Exception repoEx)
+                  {
+                     m_logger.LogError(repoEx, "Error processing repository {RepositoryId}", repoId);
+                  }
+               }
             }
             catch (Exception ex)
             {
@@ -59,27 +59,27 @@ namespace GitScribe.Service
             return;
          }
 
-         // Log general repository info
-         m_logger.LogInformation(
-             "[{RepositoryId}] Repository Information: Path={Path}, WorkingDirectory={WorkingDirectory}, IsHeadDetached={IsHeadDetached}",
-             repositoryId,
-             repositoryInfo.Path,
-             repositoryInfo.WorkingDirectory,
-             repositoryInfo.IsHeadDetached
-         );
+         //// Log general repository info
+         //m_logger.LogInformation(
+         //    "[{RepositoryId}] Repository Information: Path={Path}, WorkingDirectory={WorkingDirectory}, IsHeadDetached={IsHeadDetached}",
+         //    repositoryId,
+         //    repositoryInfo.Path,
+         //    repositoryInfo.WorkingDirectory,
+         //    repositoryInfo.IsHeadDetached
+         //);
 
-         using var repo = new Repository(repositoryInfo.Path);
+         using var repo = new Repository(repositoryInfo.WorkingDirectory);
 
          // Get the current branch
-         var branch = repo.Head;
-         if (!repositoryInfo.IsHeadDetached)
-         {
-            m_logger.LogInformation("[{RepositoryId}] Current branch: {Branch}", repositoryId, branch.FriendlyName);
-         }
-         else
-         {
-            m_logger.LogWarning("[{RepositoryId}] Repository is in a detached HEAD state", repositoryId);
-         }
+         //var branch = repo.Head;
+         //if (!repositoryInfo.IsHeadDetached)
+         //{
+         //   m_logger.LogInformation("[{RepositoryId}] Current branch: {Branch}", repositoryId, branch.FriendlyName);
+         //}
+         //else
+         //{
+         //   m_logger.LogWarning("[{RepositoryId}] Repository is in a detached HEAD state", repositoryId);
+         //}
 
          // Get uncommitted changes
          var status = repo.RetrieveStatus();

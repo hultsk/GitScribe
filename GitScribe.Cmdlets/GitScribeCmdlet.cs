@@ -33,13 +33,7 @@ namespace GitScribe.Cmdlets
          {
             var loggerFactory = new PowerShellLoggerFactory(this);
             var settings = new RepositorySettings();
-            settings.Repositories.Add(new RepositoryConfig
-            {
-               Id = "test-repo",
-               Name = "Test Repository",
-               Path = RepositoryPath,
-               IsActive = true
-            });
+            settings.Repositories.Add(new RepositoryConfig("test-repo", "Test Repository", RepositoryPath));
 
             m_repositoryManager = new RepositoryManager(settings, loggerFactory.CreateLogger<RepositoryManager>());
             m_commitAssistant = new CommitAssistant(m_repositoryManager, new(Endpoint, ApiKey, DeploymentName, ModelId));

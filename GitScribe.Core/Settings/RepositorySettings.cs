@@ -7,10 +7,7 @@ public record RepositorySettings()
    public List<RepositoryConfig> Repositories { get; set; } = [];
 }
 
-public class RepositoryConfig
+public record RepositoryConfig(string Id, string Name, string Path)
 {
-   public required string Id { get; set; }
-   public required string Name { get; set; }
-   public required string Path { get; set; }
    public bool IsActive { get; set; } = true;
 }

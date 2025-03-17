@@ -16,11 +16,8 @@ namespace GitScribe.Debug
          string apiKey = configuration["AzureOpenAI:ApiKey"] ?? throw new InvalidOperationException("AzureOpenAI:ApiKey is not configured.");
 
          var settings = new RepositorySettings();
-         settings.Repositories.Add(new RepositoryConfig
+         settings.Repositories.Add(new RepositoryConfig("test-repo", "Test Repository", RepositoryPath)
          {
-            Id = "test-repo",
-            Name = "Test Repository",
-            Path = RepositoryPath,
             IsActive = true
          });
          using var loggerFactory = LoggerFactory.Create(builder =>
