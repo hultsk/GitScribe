@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GitScribe.Core.Tests", "Git
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GitScribe.Service", "GitScribe.Service\GitScribe.Service\GitScribe.Service.csproj", "{F976725A-4729-41DC-AA06-E5713F33644F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GitScribe.Tray", "GitScribe.Tray\GitScribe.Tray\GitScribe.Tray.csproj", "{59F75197-07C1-46B1-A8F7-03AC361577D6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{F976725A-4729-41DC-AA06-E5713F33644F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F976725A-4729-41DC-AA06-E5713F33644F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F976725A-4729-41DC-AA06-E5713F33644F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{59F75197-07C1-46B1-A8F7-03AC361577D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{59F75197-07C1-46B1-A8F7-03AC361577D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{59F75197-07C1-46B1-A8F7-03AC361577D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{59F75197-07C1-46B1-A8F7-03AC361577D6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
