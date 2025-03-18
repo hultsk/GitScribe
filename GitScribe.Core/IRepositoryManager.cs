@@ -7,11 +7,11 @@ namespace GitScribe.Core;
 /// </summary>
 public interface IRepositoryManager
 {
-   IEnumerable<string> GetRepositoryIds();
-   RepositoryInformation? GetRepositoryInformation(string repositoryId);
-   IEnumerable<(string Id, RepositoryInformation Info)> GetAllRepositoryInformation();
+   IEnumerable<string> GetRepositories();
+   RepositoryInformation? GetRepositoryInformation(string name);
+   IEnumerable<(string Name, RepositoryInformation Info)> GetAllRepositoryInformation();
    bool AddRepository(RepositoryConfig config);
-   bool RemoveRepository(string repositoryId);
+   bool RemoveRepository(string name);
    bool UpdateRepository(RepositoryConfig config);
 
    /// <summary>

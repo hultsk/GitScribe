@@ -7,7 +7,4 @@ public record RepositorySettings()
    public List<RepositoryConfig> Repositories { get; set; } = [];
 }
 
-public record RepositoryConfig(string Id, string Name, string Path)
-{
-   public bool IsActive { get; set; } = true;
-}
+public record RepositoryConfig(string Name, string Path);

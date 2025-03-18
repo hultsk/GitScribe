@@ -17,20 +17,18 @@ public class RepositoryManager : IRepositoryManager
       m_currentRepositoryConfig = m_settings.Repositories.FirstOrDefault() ?? throw new ArgumentNullException(nameof(settings.Repositories));
    }
 
-   public IEnumerable<string> GetRepositoryIds()
+   public IEnumerable<string> GetRepositories()
    {
-      return m_settings.Repositories
-          .Where(r => r.IsActive)
-          .Select(r => r.Id);
+      return m_settings.Repositories.Select(r => r.Name);
    }
 
-   public RepositoryInformation? GetRepositoryInformation(string repositoryId)
+   public RepositoryInformation? GetRepositoryInformation(string name)
    {
-      var repoConfig = m_settings.Repositories.FirstOrDefault(r => r.Id == repositoryId && r.IsActive);
+      var repoConfig = m_settings.Repositories.FirstOrDefault(r => r.Name == name);
 
       if (repoConfig == null)
       {
-         m_logger.LogWarning("Repository with ID {RepositoryId} not found or inactive", repositoryId);
+         m_logger.LogWarning("Repository with name {Name} not found or inactive", name);
          return null;
       }
 
@@ -43,27 +41,27 @@ public class RepositoryManager : IRepositoryManager
       }
       catch (Exception ex)
       {
-         m_logger.LogError(ex, "Error accessing repository {RepositoryId} at {Path}", repositoryId, repoConfig.Path);
+         m_logger.LogError(ex, "Error accessing repository {Name} at {Path}", name, repoConfig.Path);
          return null;
       }
    }
 
-   public IEnumerable<(string Id, RepositoryInformation Info)> GetAllRepositoryInformation()
+   public IEnumerable<(string Name, RepositoryInformation Info)> GetAllRepositoryInformation()
    {
-      var results = new List<(string Id, RepositoryInformation Info)>();
+      var results = new List<(string Name, RepositoryInformation Info)>();
 
-      foreach (var repo in m_settings.Repositories.Where(r => r.IsActive))
+      foreach (var repo in m_settings.Repositories)
       {
          try
          {
             using (var gitRepo = new Repository(repo.Path))
             {
-               results.Add((repo.Id, gitRepo.Info));
+               results.Add((repo.Name, gitRepo.Info));
             }
          }
          catch (Exception ex)
          {
-            m_logger.LogError(ex, "Error accessing repository {RepositoryId} at {Path}", repo.Id, repo.Path);
+            m_logger.LogError(ex, "Error accessing repository {RepositoryId} at {Path}", repo.Name, repo.Path);
          }
       }
 
@@ -72,9 +70,9 @@ public class RepositoryManager : IRepositoryManager
 
    public bool AddRepository(RepositoryConfig config)
    {
-      if (m_settings.Repositories.Any(r => r.Id == config.Id))
+      if (m_settings.Repositories.Any(r => r.Name == config.Name))
       {
-         m_logger.LogWarning("Repository with ID {RepositoryId} already exists", config.Id);
+         m_logger.LogWarning("Repository with ID {Name} already exists", config.Name);
          return false;
       }
 
@@ -82,13 +80,11 @@ public class RepositoryManager : IRepositoryManager
       return true;
    }
 
-   public bool RemoveRepository(string repositoryId)
+   public bool RemoveRepository(string name)
    {
-      var repo = m_settings.Repositories.FirstOrDefault(r => r.Id == repositoryId);
+      RepositoryConfig? repo = m_settings.Repositories.FirstOrDefault(r => r.Name == name);
       if (repo == null)
-      {
          return false;
-      }
 
       m_settings.Repositories.Remove(repo);
       return true;
@@ -96,11 +92,9 @@ public class RepositoryManager : IRepositoryManager
 
    public bool UpdateRepository(RepositoryConfig config)
    {
-      var existingRepo = m_settings.Repositories.FirstOrDefault(r => r.Id == config.Id);
+      var existingRepo = m_settings.Repositories.FirstOrDefault(r => r.Name == config.Name);
       if (existingRepo == null)
-      {
          return false;
-      }
 
       // Remove old config and add updated one
       m_settings.Repositories.Remove(existingRepo);
