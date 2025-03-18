@@ -22,14 +22,14 @@ public class RepositoryManager : IRepositoryManager
       return m_settings.Repositories.Select(r => r.Name);
    }
 
-   public RepositoryInformation? GetRepositoryInformation(string name)
+   public RepositoryInformation GetRepositoryInformation(string name)
    {
       var repoConfig = m_settings.Repositories.FirstOrDefault(r => r.Name == name);
 
       if (repoConfig == null)
       {
-         m_logger.LogWarning("Repository with name {Name} not found or inactive", name);
-         return null;
+         m_logger.LogError("Repository with name {Name} not found or inactive", name);
+         throw new ArgumentException();
       }
 
       try
@@ -42,7 +42,15 @@ public class RepositoryManager : IRepositoryManager
       catch (Exception ex)
       {
          m_logger.LogError(ex, "Error accessing repository {Name} at {Path}", name, repoConfig.Path);
-         return null;
+         throw new IOException();
+      }
+   }
+
+   public RepositoryStatus GetRepositoryStatus(string path)
+   {
+      using (var repo = new Repository(path))
+      {
+         return repo.RetrieveStatus();
       }
    }
 

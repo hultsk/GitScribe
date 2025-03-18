@@ -8,7 +8,9 @@ namespace GitScribe.Core;
 public interface IRepositoryManager
 {
    IEnumerable<string> GetRepositories();
-   RepositoryInformation? GetRepositoryInformation(string name);
+   RepositoryInformation GetRepositoryInformation(string name);
+   RepositoryStatus GetRepositoryStatus(string path);
+
    IEnumerable<(string Name, RepositoryInformation Info)> GetAllRepositoryInformation();
    bool AddRepository(RepositoryConfig config);
    bool RemoveRepository(string name);

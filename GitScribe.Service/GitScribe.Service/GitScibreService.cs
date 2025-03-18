@@ -25,15 +25,10 @@ namespace GitScribe.Service
          }
       }
 
-      public RepositoryInformation? GetRepositoryInformation(string name) => m_repositoryManager.GetRepositoryInformation(name);
+      public RepositoryInformation GetRepositoryInformation(string name) => m_repositoryManager.GetRepositoryInformation(name);
+      public RepositoryStatus GetRepositoryStatus(string path) => m_repositoryManager.GetRepositoryStatus(path);
 
-      public IEnumerable<RepositoryInformation?> GetRepositories()
-      {
-         foreach (var repo in m_repositoryManager.GetRepositories())
-         {
-            yield return m_repositoryManager.GetRepositoryInformation(repo);
-         }
-      }
+      public IEnumerable<string> GetRepositories() => m_repositoryManager.GetRepositories();
 
       public override async Task StartAsync(CancellationToken cancellationToken)
       {
